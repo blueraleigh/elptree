@@ -1,0 +1,6 @@
+useDynLib(elptree, .registration = TRUE)
+exportPattern("^[[:alpha:]]+")
+
+S3method(predict, elptree)
+S3method(points, elptree)
+S3method(plot, elptree)

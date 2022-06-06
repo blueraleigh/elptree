@@ -1,0 +1,7 @@
+PKG_CPPFLAGS = -ICSparse/Include
+PKG_LIBS = ./CSparse/Lib/libcsparse.a
+
+$(SHLIB): libcsparse.a
+
+libcsparse.a:
+	@(cd ./CSparse/Lib && $(MAKE) static)

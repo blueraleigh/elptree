@@ -1,0 +1,11 @@
+Package: elptree
+Type: Package
+Title: Elastic principal trees for dimensionality reduction and visualization
+Version: 1.0
+Date: 2020-11-22
+Author: Michael C. Grundler
+Maintainer: Michael C. Grundler <mcgrundler@gmail.com>
+Description: elptree is an R package for constructing elastic principal trees.
+Depends: R (>= 3.5.0)
+NeedsCompilation: yes
+License: CC0
