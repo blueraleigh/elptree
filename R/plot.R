@@ -55,9 +55,11 @@ piepoints = function(x, rad, pie, piecol, piebg, ...)
 
 #' @param x Object of class `elptree`.
 #' @param by A grouping factor the same length as the number of
-#' rows in the data matrix component of `x`.
+#' rows in the data matrix component of `x`. Alternatively, a numeric
+#' matrix with the proportions of each pie.
 #' @param piecol A vector of border colors the same length as the 
-#' number of levels in the grouping factor `by`.
+#' number of levels in the grouping factor `by` (or number of
+#' columns if `by` is a matrix).
 #' @param piebg A vector of interior colors the same length as the
 #' number of levels in the grouping factor `by`.
 points.elptree = function(x, by, piecol, piebg, ...)
@@ -73,14 +75,25 @@ points.elptree = function(x, by, piecol, piebg, ...)
     }
     else
     {
-        by = as.factor(by)
-        stopifnot(length(by) == nrow(obj$X))
-        stopifnot(length(piebg) == nlevels(by))
-        # map each datum to its nearest graph vertex
-        g = predict(obj, obj$X)
-        # determine pie proportions of each graph vertex
-        pie = table(g, by)
-        with_data = as.integer(rownames(pie))
+        if (is.matrix(by))
+        {
+            stopifnot(nrow(by) == nrow(obj$V))
+            stopifnot(length(piebg) == ncol(by))
+            pie = sweep(by, 1, rowSums(by), "/")
+            with_data = which(!is.nan(rowSums(pie)) & !is.na(rowSums(pie)))
+            pie = pie[with_data, ]
+        }
+        else
+        {
+            by = as.factor(by)
+            stopifnot(length(by) == nrow(obj$X))
+            stopifnot(length(piebg) == nlevels(by))
+            # map each datum to its nearest graph vertex
+            g = predict(obj, obj$X)
+            # determine pie proportions of each graph vertex
+            pie = table(g, by)
+            with_data = as.integer(rownames(pie))
+        }
 
         args = list(...)
         cex = ifelse(is.null(args$cex), 1, args$cex)
